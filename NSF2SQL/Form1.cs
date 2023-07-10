@@ -417,6 +417,8 @@ namespace NSF2SQL
                                 {
                                     continue;
                                 }
+                                if (field.Equals("id", StringComparison.OrdinalIgnoreCase) ){field="UsrFld_Id";}
+
                                 string type = "";
                                 switch (item.type)
                                 {//TODO: get more types
