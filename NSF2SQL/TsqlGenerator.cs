@@ -107,11 +107,11 @@ USE [{0}];", databaseName);
                                         {
                                             if (column.Values[i + 1] is DateTime)
                                             {
-                                                value = ((DateTime)column.Values[i + 1]).ToString("yyyy-MM-dd HH:mm:ss");
+                                                value = ((DateTime)column.Values[i + 1]).ToString("yyyyMMdd HH:mm:ss");
                                             }
                                             else
                                             {
-                                                value = temp.ToString("yyyy-MM-dd HH:mm:ss");
+                                                value = temp.ToString("yyyyMMdd HH:mm:ss");
                                             }
                                             value = "'" + value + "'";
                                         }
