@@ -42,7 +42,7 @@ USE [{0}];", databaseName);
             }
             else
             {
-                sqlBuilder.Append(");\r\n");
+                sqlBuilder.Append(");\r\nGO\r\n");
             }
 
             return sqlBuilder.ToString();
@@ -151,6 +151,7 @@ USE [{0}];", databaseName);
             {
                 sqlBuilder.Append(string.Join(",\r\n", rows.GetRange(index, Math.Min(1000, rows.Count - index))));
                 sqlBuilder.AppendLine(";");
+                sqlBuilder.AppendLine("GO");
                 index += 1000;
 
                 if(index < rows.Count)
