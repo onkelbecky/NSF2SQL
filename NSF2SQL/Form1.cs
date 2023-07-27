@@ -337,6 +337,7 @@ namespace NSF2SQL
             string timeLeft = "";
             string timeElapsed = "0:00:00";
             string databasePath = treeView1.SelectedNode.Name;
+            mysqlDatabase = databasePath.Replace("\\","_").Replace(".","_");
             ProgressDialog pDialog = new ProgressDialog();
             pDialog.Title = "Exporting Documents";
             #region Export Documents
@@ -364,11 +365,24 @@ namespace NSF2SQL
                     NotesDocumentCollection allDocuments = db.AllDocuments;
                     NotesDocument doc = allDocuments.GetFirstDocument();
                     startTicks = DateTime.Now.Ticks;
+                    string fileSubFolder = "";
                     for (int i = 0; i < total; i++)
                     {
                         object[] items = (object[])doc.Items;
-                        if (items!=null) {
-                        foreach (NotesItem nItem in items)
+                        if (items!=null) 
+                        {
+                            foreach (NotesItem nItem in items)
+                            {
+                                switch (nItem.Name)
+                                {
+                                    case "objID":
+                                        fileSubFolder = nItem.Text;
+                                        break;
+                                    default:
+                                        break;
+                                }
+                            }
+                            foreach (NotesItem nItem in items)
                             {
                                 if (nItem.Name == "$FILE")
                                 {
@@ -379,10 +393,18 @@ namespace NSF2SQL
                                     NotesEmbeddedObject attachfile = doc.GetAttachment(fileName);
 
                                     if (attachfile != null)
-                                        attachfile.ExtractFile($@"{txbAttachmentsFolder.Text}\{fileName}");
+                                    {
+                                        string fileFolder = $@"{txbAttachmentsFolder.Text}\{fileSubFolder}";
+                                        string filePath = $@"{fileFolder}\{fileName}";
+                                        Directory.CreateDirectory(fileFolder);
+                                        if (File.Exists(filePath))
+                                        {
+                                            File.Delete(filePath);
+                                        }
+                                        attachfile.ExtractFile(filePath);
+                                    }
                                 }
                             }
-
                         }
 
                         //check if cancelled
